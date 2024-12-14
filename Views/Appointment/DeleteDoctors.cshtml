@@ -1,0 +1,14 @@
+@model IEnumerable<HospitalApp.Models.Doctor>
+
+<h1>Delete Doctors</h1>
+
+<ul>
+    @foreach (var doctor in Model)
+    {
+        <li>
+            <a asp-controller="Admin" asp-action="DeleteDoctor" asp-route-id="@doctor.Id">
+                @doctor.Name
+            </a>
+        </li>
+    }
+</ul>

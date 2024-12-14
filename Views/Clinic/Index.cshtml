@@ -1,0 +1,14 @@
+@model IEnumerable<HospitalApp.Models.Clinic>
+
+<h1>Clinic List</h1>
+
+<ul>
+    @foreach (var clinic in Model)
+    {
+        <li>
+            <a asp-controller="Clinic" asp-action="Details" asp-route-id="@clinic.ClinicId">
+                @clinic.ClinicName
+            </a>
+        </li>
+    }
+</ul>

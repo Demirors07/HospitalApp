@@ -1,0 +1,26 @@
+@using HospitalApp.Models
+@model AvailableTimeViewModel
+
+
+<h2>Available Times</h2>
+
+<p>Doctor ID: @Model.DoctorId</p>
+<p>Date: @Model.AppointmentDate.ToShortDateString()</p>
+
+<form asp-action="BookAppointment" method="post">
+    <p>Doctor name: @Model.DoctorName</p>
+    <input type="hidden" name="DoctorId" value="@Model.DoctorId" />
+    <input type="hidden" name="AppointmentDate" value="@Model.AppointmentDate" />
+    <input type="hidden" name="DoctorName" value="@Model.DoctorName" />
+    <input type="hidden" name="PatientID" value="@Model.PatientID" />
+
+    <label for="Time">Select a Time</label>
+    <select id="Time" name="Time" class="form-control">
+        @foreach (var time in Model.AvailableTimes)
+        {
+            <option value="@time">@time</option>
+        }
+    </select>
+
+    <button type="submit" class="btn btn-primary mt-3">Book Appointment</button>
+</form>

@@ -1,0 +1,221 @@
+@* @model Appointment
+
+<h2>Create Appointment</h2>
+
+<form asp-action="AvailableTimes" method="post">
+    <div class="form-group">
+    <label for="ClinicId">Clinic</label>
+    <select id="ClinicId" asp-for="ClinicId" class="form-control" asp-items="@(new SelectList(ViewBag.Clinics, "ClinicId", "ClinicName"))">
+        <option value="">Select a clinic</option>
+        <!-- Klinik bilgileri sunucudan doldurulmalı -->
+    </select>
+</div>
+
+<div class="form-group">
+        
+        <label for="DoctorId">Select Doctor:</label>
+        <select id="DoctorId" name="DoctorId" class="form-control" onchange="updateDoctorName()">
+            @foreach (var doctor in ViewBag.Doctors)
+            {
+                <option value="@doctor.Id" data-name="@doctor.Name">@doctor.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="Date">Select Date:</label>
+        <input type="date" id="Date" name="AppointmentDate" class="form-control" required />
+    </div>
+
+     <!-- Hidden input to hold the selected doctor name -->
+    <input type="hidden" id="DoctorName" name="DoctorName" />
+
+<input type="hidden" name="PatientId" value="@ViewBag.user" />
+
+    <button type="submit" class="btn btn-primary">Find Available Times</button>
+</form> *@
+
+
+@* <script>
+    // Update DoctorName field whenever a doctor is selected
+    function updateDoctorName() {
+        var doctorSelect = document.getElementById('DoctorId');
+        var selectedOption = doctorSelect.options[doctorSelect.selectedIndex];
+        document.getElementById('DoctorName').value = selectedOption.getAttribute('data-name');
+    }
+
+    // Set the initial value for DoctorName
+    updateDoctorName();
+</script> *@
+
+@* @section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        const clinicDropdown = document.getElementById("ClinicId");
+        const doctorDropdown = document.getElementById("DoctorId");
+        const dateInput = document.getElementById("AppointmentDate");
+        const timeDropdown = document.getElementById("AppointmentTime");
+
+        // Klinik seçildiğinde doktorları getir
+        clinicDropdown.addEventListener("change", () => {
+            const clinicId = clinicDropdown.value;
+
+            doctorDropdown.innerHTML = '<option value="">Select a doctor</option>';
+
+            if (clinicId) {
+                fetch(`/Appointment/GetDoctorsByClinic?clinicId=${clinicId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(doctor => {
+                            const option = document.createElement("option");
+                            option.value = doctor.id;
+                            option.textContent = doctor.name;
+                            doctorDropdown.appendChild(option);
+                        });
+                    });
+            }
+        });
+
+        // Seçilen doktor adını gizli alana yaz
+        function updateDoctorName() {
+            var doctorSelect = document.getElementById("DoctorId");
+            var selectedOption = doctorSelect.options[doctorSelect.selectedIndex];
+            var doctorNameInput = document.getElementById("DoctorName");
+
+            doctorNameInput.value = selectedOption ? selectedOption.dataset.name : "";
+        }
+    </script>
+} *@
+
+@* @section Scripts {
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const clinicDropdown = document.getElementById("ClinicId");
+        const doctorDropdown = document.getElementById("DoctorId");
+        const dateInput = document.getElementById("AppointmentDate");
+        const timeDropdown = document.getElementById("AppointmentTime");
+
+        // Klinik seçildiğinde doktorları getir
+        clinicDropdown.addEventListener("change", () => {
+            const clinicId = clinicDropdown.value;
+
+            doctorDropdown.innerHTML = '<option value="">Select a doctor</option>';
+
+            if (clinicId) {
+                fetch(`/Appointment/GetDoctorsByClinic?clinicId=${clinicId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(doctor => {
+                            const option = document.createElement("option");
+                            option.value = doctor.id;
+                            option.textContent = doctor.name;
+                            doctorDropdown.appendChild(option);
+                        });
+                    });
+            }
+        });
+
+        // Doktor ve tarih seçildiğinde mevcut zamanları getir
+        doctorDropdown.addEventListener("change", loadAvailableTimes);
+        dateInput.addEventListener("change", loadAvailableTimes);
+
+        function loadAvailableTimes() {
+            const doctorId = doctorDropdown.value;
+            const date = dateInput.value;
+
+            timeDropdown.innerHTML = '<option value="">Select a time</option>';
+
+            if (doctorId && date) {
+                fetch(`/Appointment/GetAvailableTimes?doctorId=${doctorId}&date=${date}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(time => {
+                            const option = document.createElement("option");
+                            option.value = time;
+                            option.textContent = time;
+                            timeDropdown.appendChild(option);
+                        });
+                    });
+            }
+        }
+    });
+</script>
+} *@
+
+
+
+@model Appointment
+
+<h2>Create Appointment</h2>
+
+<form asp-action="AvailableTimes" method="post">
+    <div class="form-group">
+        <label for="ClinicId">Clinic</label>
+        <select id="ClinicId" asp-for="ClinicId" class="form-control">
+            <option value="">Select a clinic</option>
+            @foreach (var clinic in ViewBag.Clinics)
+            {
+                <option value="@clinic.ClinicId">@clinic.ClinicName</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="DoctorId">Select Doctor:</label>
+        <select id="DoctorId" name="DoctorId" class="form-control" onchange="updateDoctorName()">
+            <option value="">Select a doctor</option>
+            <!-- Doktor bilgileri AJAX ile doldurulacak -->
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="Date">Select Date:</label>
+        <input type="date" id="Date" name="AppointmentDate" class="form-control" required />
+    </div>
+
+    <!-- Hidden input to hold the selected doctor name -->
+    <input type="hidden" id="DoctorName" name="DoctorName" />
+
+    <input type="hidden" name="PatientId" value="@ViewBag.user" />
+
+    <button type="submit" class="btn btn-primary">Find Available Times</button>
+</form>
+
+@section Scripts {
+    <script>
+        // Klinik seçimi değiştiğinde doktorları güncelle
+        document.getElementById("ClinicId").addEventListener("change", function () {
+            var clinicId = this.value;
+            var doctorSelect = document.getElementById("DoctorId");
+
+            // Doktor seçim kutusunu temizle
+            doctorSelect.innerHTML = '<option value="">Select a doctor</option>';
+
+            if (clinicId) {
+                // Sunucuya AJAX isteği gönder
+                fetch(`/Appointment/GetDoctorsByClinic?clinicId=${clinicId}`)
+                    .then(response => response.json())
+                    .then(doctors => {
+                        // Doktorları seçime ekle
+                        doctors.forEach(doctor => {
+                            var option = document.createElement("option");
+                            option.value = doctor.Id;
+                            option.textContent = doctor.Name;
+                            option.dataset.name = doctor.Name;
+                            doctorSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching doctors:', error));
+            }
+        });
+
+        // Seçilen doktor adını gizli alana yaz
+        function updateDoctorName() {
+            var doctorSelect = document.getElementById("DoctorId");
+            var selectedOption = doctorSelect.options[doctorSelect.selectedIndex];
+            var doctorNameInput = document.getElementById("DoctorName");
+
+            doctorNameInput.value = selectedOption ? selectedOption.dataset.name : "";
+        }
+    </script>
+}

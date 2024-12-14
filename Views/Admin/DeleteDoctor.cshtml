@@ -1,0 +1,12 @@
+@model Doctor
+
+<p> Do you want to delete the product with the ID @Model.Id </p>
+
+<form asp-controller="Admin" asp-action="DeleteDoctor" method="post">
+    <input type="hidden" name="id" asp-for="@Model.Id">
+    <button type="submit" class="btn btn-outline-danger">Yes</button>
+</form>
+
+<form asp-controller="Appointment" asp-action="DeleteDoctors" method="get">
+    <button type="submit" class="btn btn-outline-primary">No</button>
+</form>
