@@ -10,7 +10,7 @@
 <form asp-action="BookAppointment" method="post">
     <p>Doctor name: @Model.DoctorName</p>
     <input type="hidden" name="DoctorId" value="@Model.DoctorId" />
-    <input type="hidden" name="AppointmentDate" value="@Model.AppointmentDate" />
+    <input type="text" name="AppointmentDate" value="@Model.AppointmentDate" />
     <input type="hidden" name="DoctorName" value="@Model.DoctorName" />
     <input type="hidden" name="PatientID" value="@Model.PatientID" />
 

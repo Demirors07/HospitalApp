@@ -3,9 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using HospitalApp.Models;
 using HospitalApp.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HospitalApp.Controllers
 {
+
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly StoreDbContext _context;
@@ -13,6 +16,13 @@ namespace HospitalApp.Controllers
         public AdminController(StoreDbContext context)
         {
             _context = context;
+        }
+
+         // Klinik Listeleme
+        public async Task<IActionResult> ClinicList()
+        {
+            var clinics = await _context.Clinics.ToListAsync();
+            return View(clinics);
         }
 
 
@@ -30,44 +40,6 @@ namespace HospitalApp.Controllers
         await _context.SaveChangesAsync();
         return RedirectToAction("Index", "Home");
     }
-
-        // Klinik Listeleme
-        public async Task<IActionResult> ClinicList()
-        {
-            var clinics = await _context.Clinics.ToListAsync();
-            return View(clinics);
-        }
-
-        // Klinik Güncelleme
-        [HttpGet]
-        public async Task<IActionResult> EditClinic(int id)
-        {
-            var clinic = await _context.Clinics.FindAsync(id);
-            if (clinic == null)
-            {
-                return NotFound();
-            }
-            return View(clinic);
-        }
-
-        [HttpPost]
-    public async Task<IActionResult> EditClinic(int id, Clinic clinic){
-        clinic.ClinicId = id;
-
-        //if(ModelState.IsValid){
-            try{
-                _context.Update(clinic);
-                await _context.SaveChangesAsync();
-            }catch(Exception){
-                throw;
-            }
-            return RedirectToAction("Clinics", "Appointment");
-        //}
-
-        return View(clinic);
-    }
-
-        
 
 [HttpGet]
      public ActionResult AddDoctor(){
@@ -89,6 +61,7 @@ namespace HospitalApp.Controllers
 
 
         // Doktor Güncelleme View'ı
+        [HttpGet]
 public async Task<IActionResult> EditDoctor(long id)
 {
     var doctor = await _context.Doctors.FindAsync(id);
@@ -115,6 +88,35 @@ public async Task<IActionResult> EditDoctor(long id)
         //}
 
         return View(doctor);
+    }
+
+     // Klinik Güncelleme
+        [HttpGet]
+        public async Task<IActionResult> EditClinic(int id)
+        {
+            var clinic = await _context.Clinics.FindAsync(id);
+            if (clinic == null)
+            {
+                return NotFound();
+            }
+            return View(clinic);
+        }
+
+        [HttpPost]
+    public async Task<IActionResult> EditClinic(int id, Clinic clinic){
+        clinic.ClinicId = id;
+
+        //if(ModelState.IsValid){
+            try{
+                _context.Update(clinic);
+                await _context.SaveChangesAsync();
+            }catch(Exception){
+                throw;
+            }
+            return RedirectToAction("Clinics", "Appointment");
+        //}
+
+        return View(clinic);
     }
 
 [HttpGet]

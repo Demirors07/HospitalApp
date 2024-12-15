@@ -42,11 +42,7 @@ namespace HospitalApp.Models
             IdentityUser? admin = await userManager.FindByNameAsync(adminUser);
             if (admin == null)
             {
-                admin = new IdentityUser(adminUser)
-                {
-                    Email = "admin@sauseng.com",
-                    PhoneNumber = "02641234567"
-                };
+                
                 await userManager.CreateAsync(admin, adminPassword);
                 await userManager.AddToRoleAsync(admin, adminRole); 
             }
@@ -54,11 +50,7 @@ namespace HospitalApp.Models
             IdentityUser? regular = await userManager.FindByNameAsync(regularUser);
             if (regular == null)
             {
-                regular = new IdentityUser(regularUser)
-                {
-                    Email = "user@sauseng.com",
-                    PhoneNumber = "02647654321"
-                };
+                
                 await userManager.CreateAsync(regular, regularPassword);
                 await userManager.AddToRoleAsync(regular, userRole); 
             }

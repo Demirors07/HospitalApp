@@ -2,20 +2,10 @@
 
 <h2>Login</h2>
 
-@* @if (!ViewData.ModelState.IsValid)
-{
-    <div class="alert alert-danger">
-        <ul>
-            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-            {
-                <li>@error.ErrorMessage</li>
-            }
-        </ul>
-    </div>
-} *@
+
 
 <form asp-action="Login" method="post">
-    <input type="hidden" asp-for="ReturnUrl" /> <!-- Gizli alan -->
+    <input type="hidden" asp-for="ReturnUrl" />
     <div class="form-group">
         <label asp-for="UserName"></label>
         <input asp-for="UserName" class="form-control" />

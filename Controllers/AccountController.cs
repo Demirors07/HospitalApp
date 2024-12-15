@@ -11,14 +11,7 @@ public class AccountController : Controller{
         _signInManager = signInManager;
         _userManager = userManager;
     }
-
-    // [HttpGet]
-    // public IActionResult Login(string ReturnUrl){
-    //     // ReturnUrl keeps the url of the action we are coming from, after login action, we want to return where we came from
-    //     ViewData["ReturnUrl"] = ReturnUrl; //we are not using it?
-    //     return View();
-    // }
-
+    
     [HttpGet]
 public IActionResult Login(string? ReturnUrl)
 {
@@ -55,33 +48,6 @@ public async Task<IActionResult> Login(LoginViewModel model, string? ReturnUrl)
     }
     return View(model);
 }
-
-    // [HttpPost]
-    // public async Task<IActionResult> Login(LoginViewModel model, string ReturnUrl){
-    //     // ReturnUrl keeps the url of the action we are coming from, after login action, we want to return where we came from
-    //     if (ModelState.IsValid){
-    //         var user = await _userManager.FindByNameAsync(model.UserName);
-
-    //         if (user != null){
-    //             var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
-
-    //             if (result.Succeeded){
-    //                 // if the ReturnUrl is empty, the user will be returned to the home/index
-    //                 return RedirectToAction(ReturnUrl ?? "/"); 
-    //             }
-    //             else{
-    //                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-    //             }
-    //         }
-    //         else{
-    //             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-    //         }
-    //     }
-
-    //     return View(model); 
-    // }
-
-
 
     public async Task<IActionResult> Logout(){
         await _signInManager.SignOutAsync();

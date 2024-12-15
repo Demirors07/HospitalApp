@@ -62,10 +62,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcQXBwb2ludG1lbnREZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Muho/Desktop/HospitalApp/HospitalApp/Views/Appointment/Appointments.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcQXBwb2ludG1lbnRzLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/Muho/Desktop/HospitalApp/HospitalApp/Views/Appointment/AvailableTimes.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcQXZhaWxhYmxlVGltZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -88,10 +84,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Muho/Desktop/HospitalApp/HospitalApp/Views/Appointment/EditDoctors.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcRWRpdERvY3RvcnMuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Muho/Desktop/HospitalApp/HospitalApp/Views/Appointment/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Muho/Desktop/HospitalApp/HospitalApp/Views/Clinic/Details.cshtml]

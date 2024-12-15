@@ -1,10 +1,6 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\Muho\\Desktop\\HospitalApp\\HospitalApp\\wwwroot\\HospitalApp\\clear.svg",
-      "PackagePath": "staticwebassets\\HospitalApp\\clear.svg"
-    },
-    {
       "Id": "C:\\Users\\Muho\\Desktop\\HospitalApp\\HospitalApp\\wwwroot\\HospitalApp\\hospital_logo.png",
       "PackagePath": "staticwebassets\\HospitalApp\\hospital_logo.png"
     },

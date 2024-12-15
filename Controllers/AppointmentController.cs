@@ -24,20 +24,6 @@ public class AppointmentController : Controller
     }
 
 
-[HttpGet]
-public IActionResult GetDoctorsByClinic(int clinicId)
-{
-    if (clinicId <= 0)
-        return BadRequest("Invalid clinic ID");
-
-    var doctors = _context.Doctors
-        .Where(d => d.ClinicId == clinicId)
-        .Select(d => new { d.Id, d.Name })
-        .ToList();
-
-    return Json(doctors); // JSON olarak doktorları döner
-}
-
      // GET: Appointments/Create
     public IActionResult Create()
     {
@@ -47,14 +33,24 @@ public IActionResult GetDoctorsByClinic(int clinicId)
         return View();
     }
 
+
     [HttpPost]
-    public IActionResult GetDoctors(int clinicId)
+    public async Task<IActionResult> Create(Appointment model)
     {
-        var doctors = _context.Doctors.Where(d => d.ClinicId == clinicId).ToList();
-        return Json(doctors); // Return the doctors for the selected clinic
+        var userId = _userManager.GetUserId(User);
+
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        model.PatientId = userId;
+    
+            return RedirectToAction("AvailableTimes",model);
+
+        ViewBag.Clinics = _context.Clinics.ToList();
+        return View(model);
     }
-
-
 
    [HttpGet]
 public IActionResult AvailableTimes(long doctorId, DateTime appointmentDate)
@@ -123,73 +119,6 @@ private List<TimeSpan> GetAvailableTimes(long doctorId, DateTime date)
     return timeSlots.Except(bookedTimes).ToList();
 }
 
-    
-
-    // [HttpPost]
-    //  public async Task<ActionResult> Create(Product product){
-    //     _context.Products.Add(product);
-    //     await _context.SaveChangesAsync();
-    //     return RedirectToAction("Index");
-    // }
-
-
-
-
-
-     [HttpPost]
-    public async Task<IActionResult> Create(Appointment model)
-    {
-        var userId = _userManager.GetUserId(User);
-
-        if (userId == null)
-        {
-            return RedirectToAction("Login", "Account");
-        }
-
-        model.PatientId = userId;
-        
-        // model.DoctorId = 1;
-        // model.ClinicId = 1;
-        // model.AppointmentDate = new DateTime(01/08/2025);
-        // model.DoctorId = 1;
-
-        
-            // _context.Appointments.Add(model);
-            // await _context.SaveChangesAsync();
-            return RedirectToAction("AvailableTimes",model);
-        
-
-//         if (!ModelState.IsValid)
-// {
-//     var errors = ModelState.Values.SelectMany(v => v.Errors)
-//                                    .Select(e => e.ErrorMessage)
-//                                    .ToList();
-//     // Hata mesajlarını loglayabilirsiniz
-//     foreach(var error in errors)
-//     {
-//         Console.WriteLine(error);
-//     }
-//     ViewBag.Clinics = _context.Clinics.ToList();
-//     return View(model);
-// }
-
-        ViewBag.Clinics = _context.Clinics.ToList();
-        return View(model);
-    }
-
-
-      private List<TimeSpan> GenerateTimeSlots(TimeSpan start, TimeSpan end, int interval = 20)
-    {
-        var slots = new List<TimeSpan>();
-        while (start < end)
-        {
-            slots.Add(start);
-            start = start.Add(TimeSpan.FromMinutes(interval));
-        }
-        return slots;
-    }
-
-
 
  // Randevu al ve kaydet
     [HttpPost]
@@ -211,8 +140,6 @@ private List<TimeSpan> GetAvailableTimes(long doctorId, DateTime date)
 
         return RedirectToAction("AppointmentDetails");
     }
-
-
 
 [HttpGet]
         public async Task<IActionResult> AppointmentDetails()
@@ -248,56 +175,6 @@ private List<TimeSpan> GetAvailableTimes(long doctorId, DateTime date)
             return View(model);
         }
 
-    // Randevu geçmişi ve geleceği
-    // public IActionResult AppointmentDetails()
-    // {
-    //     var userId = User.Identity.Name; // Kullanıcı kimliği
-    //     // var appointments = _context.Appointments
-    //     //     .Where(a => a.PatientId == userId) // Kullanıcının randevularını filtrele
-    //     //     .OrderBy(a => a.AppointmentDate)
-    //     //     .ThenBy(a => a.AppointmentTime)
-    //     //     .ToList();
-
-    //     return View();
-    // }
-    
-
-
-[HttpGet]
-public async Task<IActionResult> GetDoctorsByClinic(long clinicId)
-{
-    // Klinik ID'ye göre doktorları al
-    var doctors = await _context.Doctors
-        .Where(d => d.ClinicId == clinicId)
-        .Select(d => new
-        {
-            Id = d.Id,
-            Name = d.Name
-        })
-        .ToListAsync();
-
-    return Json(doctors); // JSON formatında doktor listesini döndür
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
      public IActionResult EditClinics()
     {
         var clinics = _context.Clinics.ToList();
@@ -321,6 +198,5 @@ public async Task<IActionResult> GetDoctorsByClinic(long clinicId)
         var doctors = _context.Doctors.ToList();
         return View(doctors);
     }
-
 
 }

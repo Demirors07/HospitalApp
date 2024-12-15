@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "r+kQtxX4jdzHD8fdqnfGtvjU/OV0tqJ8/C8yMAt6Jrc=",
+  "Hash": "08tJ8nGUNtQ/A9mWrUSg7T2Zj8ujOxwr0ieP2bNP1d0=",
   "Source": "HospitalApp",
   "BasePath": "_content/HospitalApp",
   "Mode": "Default",
@@ -16,25 +16,6 @@
     }
   ],
   "Assets": [
-    {
-      "Identity": "C:\\Users\\Muho\\Desktop\\HospitalApp\\HospitalApp\\wwwroot\\HospitalApp\\clear.svg",
-      "SourceId": "HospitalApp",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Muho\\Desktop\\HospitalApp\\HospitalApp\\wwwroot\\",
-      "BasePath": "_content/HospitalApp",
-      "RelativePath": "HospitalApp/clear.svg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\HospitalApp\\clear.svg"
-    },
     {
       "Identity": "C:\\Users\\Muho\\Desktop\\HospitalApp\\HospitalApp\\wwwroot\\HospitalApp\\hospital_logo.png",
       "SourceId": "HospitalApp",

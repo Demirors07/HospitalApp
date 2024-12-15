@@ -26,17 +26,22 @@
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav">
       
-     
+     <li class="nav-item me-5">
+        <a class="nav-link" href="/Appointment/AppointmentDetails">AppointmentDetails</a>
+      </li>
+
       <li class="nav-item me-5">
         <a class="nav-link" href="/Clinic/Index">Clinics</a>
       </li>
+
+      @if(User.Identity.IsAuthenticated){
+        if(User.IsInRole("Admin")){
       <li class="nav-item me-5 dropdown">
         <div class="dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                 ADD
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#">Appointment</a></li>
                 <li><a class="dropdown-item" href="/Admin/AddDoctor">Doctor</a></li>
                 <li><a class="dropdown-item" href="/Admin/AddClinic">Clinic</a></li>
             </ul>
@@ -48,7 +53,6 @@
                 UPDATE
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="/Appointment/Appointments">Appointment</a></li>
                 <li><a class="dropdown-item" href="/Appointment/EditDoctors">Doctor</a></li>
                 <li><a class="dropdown-item" href="/Appointment/EditClinics">Clinic</a></li>
             </ul>
@@ -60,12 +64,13 @@
                 DELETE
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="/Appointment/Appointments">Appointment</a></li>
                 <li><a class="dropdown-item" href="/Appointment/DeleteDoctors">Doctor</a></li>
                 <li><a class="dropdown-item" href="/Appointment/DeleteClinics">Clinic</a></li>
             </ul>
         </div>
       </li>
+        }   
+                        }
       <li class="nav-item">
          @if (SignInManager.IsSignedIn(User))
                         {

@@ -155,3 +155,4 @@ C:\Users\Muho\Desktop\HospitalApp\HospitalApp\obj\Debug\net8.0\HospitalApp.genru
 C:\Users\Muho\Desktop\HospitalApp\HospitalApp\obj\Debug\net8.0\ref\HospitalApp.dll
 C:\Users\Muho\Desktop\HospitalApp\HospitalApp\bin\Debug\net8.0\HospitalApp.staticwebassets.runtime.json
 C:\Users\Muho\Desktop\HospitalApp\HospitalApp\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\Muho\Desktop\HospitalApp\HospitalApp\obj\Debug\net8.0\HospitalApp.sourcelink.json
