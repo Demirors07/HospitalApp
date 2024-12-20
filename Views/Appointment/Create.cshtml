@@ -36,8 +36,6 @@
 
 
 
-
-
     <div class="mb-3">
         <label for="ClinicId">Clinic</label>
         <select id="ClinicId" name="ClinicId" class="form-control">
@@ -57,12 +55,18 @@
     </div>
 
 
+<div class="mb-3">
+    <label asp-for="AppointmentDate" class="form-label">Select Date</label>
+    <input type="date" asp-for="AppointmentDate" class="form-control" 
+           min="@DateTime.Now.ToString("yyyy-MM-dd")" required>
+    <span asp-validation-for="AppointmentDate" class="text-danger"></span>
+</div>
 
-    <div class="mb-3">
+  @* <div class="mb-3">
         <label asp-for="AppointmentDate" class="form-label">Select-Date</label>
         <input type="date" asp-for="AppointmentDate" class="form-control">
-    </div>
-
+    </div> 
+   *@
 
     @* <input type="hidden" name="Doctor.Name" value="doktor" /> *@
     @* <input type="hidden" name="Doctor.Name" /> *@
