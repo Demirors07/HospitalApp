@@ -1,6 +1,6 @@
 @model HospitalApp.Models.Clinic
 
-<h1>Details for @Model.ClinicName</h1>
+<h1>Details for @Model.Name</h1>
 
 <h2>Doctors:</h2>
 <ul>
@@ -8,6 +8,7 @@
     {
         <li>@doctor.Name</li>
     }
+    
 </ul>
 
 <a asp-controller="Clinic" asp-action="Index">Back to Clinic List</a>

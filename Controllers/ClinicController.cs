@@ -27,7 +27,7 @@ public class ClinicController : Controller
     {
         var clinic = _context.Clinics
             .Include(c => c.Doctors) // Doktorları dahil ediyoruz
-            .FirstOrDefault(c => c.ClinicId == id);
+            .FirstOrDefault(c => c.Id == id);
 
         if (clinic == null)
             return NotFound();

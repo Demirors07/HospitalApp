@@ -7,7 +7,6 @@ namespace HospitalApp.Models {
         public DbSet<Appointment> Appointments => Set<Appointment>();
         public DbSet<Doctor> Doctors => Set<Doctor>();
         public DbSet<Clinic> Clinics => Set<Clinic>();
-        public DbSet<AvailableTime> AvailableTimes => Set<AvailableTime>();
        
 
 

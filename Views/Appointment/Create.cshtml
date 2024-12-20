@@ -1,23 +1,24 @@
 @model Appointment
 
 <h2>Create Appointment</h2>
+@ViewData["aaa"]
 
-<form asp-action="AvailableTimes" method="post">
-    <div class="form-group">
+<form asp-action="Create" method="post">
+    @* <div class="form-group">
     <label for="ClinicId">Clinic</label>
-    <select id="ClinicId" asp-for="ClinicId" class="form-control" asp-items="@(new SelectList(ViewBag.Clinics, "ClinicId", "ClinicName"))">
+    <select id="ClinicId" asp-for="Id" class="form-control" asp-items="@(new SelectList(ViewBag.Clinics, "Id", "Name"))">
         <option value="">Select a clinic</option>
         <!-- Klinik bilgileri sunucudan doldurulmalı -->
     </select>
 </div>
 
 <div class="form-group">
-        
+
         <label for="DoctorId">Select Doctor:</label>
-        <select id="DoctorId" name="DoctorId" class="form-control" onchange="updateDoctorName()">
+        <select id="DoctorId" name="DoctorId" class="form-control">
             @foreach (var doctor in ViewBag.Doctors)
             {
-                <option value="@doctor.Id" data-name="@doctor.Name">@doctor.Name</option>
+                <option value="@doctor.Id">@doctor.Name</option>
             }
         </select>
     </div>
@@ -25,25 +26,83 @@
     <div class="form-group">
         <label for="Date">Select Date:</label>
         <input type="date" id="Date" name="AppointmentDate" class="form-control" required />
+    </div> *@
+
+
+    <!-- Hidden input to hold the selected doctor name -->
+    @* <input type="hidden" name="Doctor.Name" /> *@
+
+    @* <input type="hidden" name="PatientId" value="@ViewBag.user" /> *@
+
+
+
+
+
+    <div class="mb-3">
+        <label for="ClinicId">Clinic</label>
+        <select id="ClinicId" name="ClinicId" class="form-control">
+            @foreach (var clinic in ViewBag.Clinics)
+            {
+                <option value="@clinic.Id">@clinic.Name</option>
+            }
+        </select>
     </div>
 
-     <!-- Hidden input to hold the selected doctor name -->
-    <input type="hidden" id="DoctorName" name="DoctorName" />
+    <div class="mb-3">
+        <label for="DoctorId">Select Doctor:</label>
+        <select id="DoctorId" name="DoctorId" class="form-control">
+            <option value="">Select a doctor</option>
+            <!-- Doktor verileri dinamik olarak doldurulacak -->
+        </select>
+    </div>
 
-<input type="hidden" name="PatientId" value="@ViewBag.user" />
+
+
+    <div class="mb-3">
+        <label asp-for="AppointmentDate" class="form-label">Select-Date</label>
+        <input type="date" asp-for="AppointmentDate" class="form-control">
+    </div>
+
+
+    @* <input type="hidden" name="Doctor.Name" value="doktor" /> *@
+    @* <input type="hidden" name="Doctor.Name" /> *@
+    <input type="hidden" name="PatientId" />
+    @* <input type="hidden" name="AvailableTimes"> *@
+
 
     <button type="submit" class="btn btn-primary">Find Available Times</button>
 </form>
 
-
 <script>
-    // Update DoctorName field whenever a doctor is selected
-    function updateDoctorName() {
-        var doctorSelect = document.getElementById('DoctorId');
-        var selectedOption = doctorSelect.options[doctorSelect.selectedIndex];
-        document.getElementById('DoctorName').value = selectedOption.getAttribute('data-name');
-    }
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("ClinicId").addEventListener("change", function () {
+            var clinicId = this.value;
+            console.log("Selected ClinicId:", clinicId);
+            var doctorSelect = document.getElementById("DoctorId");
 
-    // Set the initial value for DoctorName
-    updateDoctorName();
+            // Doktor seçim kutusunu temizle
+            doctorSelect.innerHTML = '<option value="">Select a doctor</option>';
+
+            if (clinicId) {
+                // Sunucuya AJAX isteği gönder
+                fetch(`/Appointment/GetDoctorsByClinic?clinicId=${clinicId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(doctors => {
+                        console.log("Doctors:", doctors); // Veriyi kontrol edin
+                        doctors.forEach(doctor => {
+                            var option = document.createElement("option");
+                            option.value = doctor.id;
+                            option.textContent = doctor.name;
+                            doctorSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching doctors:', error));
+            }
+        });
+    });
 </script>

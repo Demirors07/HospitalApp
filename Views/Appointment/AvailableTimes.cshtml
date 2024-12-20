@@ -1,26 +1,27 @@
 @using HospitalApp.Models
-@model AvailableTimeViewModel
+@model Appointment
 
 
 <h2>Available Times</h2>
 
 <p>Doctor ID: @Model.DoctorId</p>
 <p>Date: @Model.AppointmentDate.ToShortDateString()</p>
+<p>Doctor Name: @Model.Doctor.Name</p>
 
-<form asp-action="BookAppointment" method="post">
-    <p>Doctor name: @Model.DoctorName</p>
-    <input type="hidden" name="DoctorId" value="@Model.DoctorId" />
-    <input type="text" name="AppointmentDate" value="@Model.AppointmentDate" />
-    <input type="hidden" name="DoctorName" value="@Model.DoctorName" />
-    <input type="hidden" name="PatientID" value="@Model.PatientID" />
+<form asp-action="AvailableTimes" method="post">
+    
+     <input type="hidden" name="DoctorId" value="@Model.DoctorId" />
+    <input type="hidden" name="AppointmentDate" value="@Model.AppointmentDate" />
+    <input type="hidden" name="ClinicId" value="@Model.ClinicId">
+    <input type="hidden" name="PatientId" value="@Model.PatientId" />
 
-    <label for="Time">Select a Time</label>
-    <select id="Time" name="Time" class="form-control">
-        @foreach (var time in Model.AvailableTimes)
+     <label for="AppointmentTime">Select a Time</label>
+    <select id="Time" name="AppointmentTime" class="form-control">
+        @foreach (var time in ViewBag.time)
         {
             <option value="@time">@time</option>
         }
-    </select>
+    </select> 
 
-    <button type="submit" class="btn btn-primary mt-3">Book Appointment</button>
+     <button type="submit" class="btn btn-primary mt-3">Book Appointment</button>
 </form>

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalApp.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20241215125420_Initial")]
+    [Migration("20241220090610_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -19,31 +19,6 @@ namespace HospitalApp.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
-
-            modelBuilder.Entity("HospitalApp.AvailableTime", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("DoctorId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DoctorId");
-
-                    b.ToTable("AvailableTimes");
-                });
 
             modelBuilder.Entity("HospitalApp.Models.Appointment", b =>
                 {
@@ -54,18 +29,14 @@ namespace HospitalApp.Migrations
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AppointmentTimeInMinutes")
-                        .HasColumnType("INTEGER");
+                    b.Property<TimeSpan>("AppointmentTime")
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("ClinicId")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("DoctorId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("DoctorName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("PatientId")
                         .IsRequired()
@@ -82,14 +53,14 @@ namespace HospitalApp.Migrations
 
             modelBuilder.Entity("HospitalApp.Models.Clinic", b =>
                 {
-                    b.Property<long>("ClinicId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ClinicName")
+                    b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("ClinicId");
+                    b.HasKey("Id");
 
                     b.ToTable("Clinics");
                 });
@@ -114,17 +85,6 @@ namespace HospitalApp.Migrations
                     b.ToTable("Doctors");
                 });
 
-            modelBuilder.Entity("HospitalApp.AvailableTime", b =>
-                {
-                    b.HasOne("HospitalApp.Models.Doctor", "Doctor")
-                        .WithMany("AvailableTimes")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doctor");
-                });
-
             modelBuilder.Entity("HospitalApp.Models.Appointment", b =>
                 {
                     b.HasOne("HospitalApp.Models.Clinic", "Clinic")
@@ -134,7 +94,7 @@ namespace HospitalApp.Migrations
                         .IsRequired();
 
                     b.HasOne("HospitalApp.Models.Doctor", "Doctor")
-                        .WithMany()
+                        .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -162,7 +122,7 @@ namespace HospitalApp.Migrations
 
             modelBuilder.Entity("HospitalApp.Models.Doctor", b =>
                 {
-                    b.Navigation("AvailableTimes");
+                    b.Navigation("Appointments");
                 });
 #pragma warning restore 612, 618
         }

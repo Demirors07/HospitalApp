@@ -3377,11 +3377,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Muho\\Desktop\\HospitalApp\\HospitalApp\\HospitalApp.csproj",
+      "projectUniqueName": "C:\\Users\\Muho\\Desktop\\AllHospitalApps_Webp\\HospitalApp\\HospitalApp.csproj",
       "projectName": "HospitalApp",
-      "projectPath": "C:\\Users\\Muho\\Desktop\\HospitalApp\\HospitalApp\\HospitalApp.csproj",
+      "projectPath": "C:\\Users\\Muho\\Desktop\\AllHospitalApps_Webp\\HospitalApp\\HospitalApp.csproj",
       "packagesPath": "C:\\Users\\Muho\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Muho\\Desktop\\HospitalApp\\HospitalApp\\obj\\",
+      "outputPath": "C:\\Users\\Muho\\Desktop\\AllHospitalApps_Webp\\HospitalApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Muho\\AppData\\Roaming\\NuGet\\NuGet.Config",

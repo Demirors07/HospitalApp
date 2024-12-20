@@ -92,7 +92,7 @@ public async Task<IActionResult> EditDoctor(long id)
 
      // Klinik Güncelleme
         [HttpGet]
-        public async Task<IActionResult> EditClinic(int id)
+        public async Task<IActionResult> EditClinic(long id)
         {
             var clinic = await _context.Clinics.FindAsync(id);
             if (clinic == null)
@@ -103,8 +103,8 @@ public async Task<IActionResult> EditDoctor(long id)
         }
 
         [HttpPost]
-    public async Task<IActionResult> EditClinic(int id, Clinic clinic){
-        clinic.ClinicId = id;
+    public async Task<IActionResult> EditClinic(long id, Clinic clinic){
+        clinic.Id = id;
 
         //if(ModelState.IsValid){
             try{
@@ -113,7 +113,7 @@ public async Task<IActionResult> EditDoctor(long id)
             }catch(Exception){
                 throw;
             }
-            return RedirectToAction("Clinics", "Appointment");
+            return RedirectToAction("EditClinics", "Appointment");
         //}
 
         return View(clinic);
@@ -136,7 +136,7 @@ public async Task<IActionResult> DeleteDoctor(long? id)
         var doctor = await _context.Doctors.FindAsync(id);
         _context.Doctors.Remove(doctor);
         await _context.SaveChangesAsync();
-        return RedirectToAction("DeleteClinics", "Appointment");
+        return RedirectToAction("DeleteDoctors", "Appointment");
     }
 
 
@@ -159,7 +159,7 @@ public async Task<IActionResult> DeleteClinic(long? id)
         var clinic = await _context.Clinics.FindAsync(id);
         _context.Clinics.Remove(clinic);
         await _context.SaveChangesAsync();
-        return RedirectToAction("DeleteDoctors", "Appointment");
+        return RedirectToAction("DeleteClinics", "Appointment");
     }
 
 

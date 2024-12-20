@@ -8,9 +8,9 @@ namespace HospitalApp.Models
         public long Id { get; set; }
         public string Name { get; set; }
 
-        [ForeignKey("ClinicId")]
+        [ForeignKey("Clinic")]
         public long ClinicId { get; set; } // Foreign Key
         public Clinic Clinic { get; set; }
-        public List<AvailableTime> AvailableTimes { get; set; } = new();
+        public ICollection<Appointment> Appointments { get; set; }
     }
 }

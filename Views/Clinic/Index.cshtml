@@ -6,8 +6,8 @@
     @foreach (var clinic in Model)
     {
         <li>
-            <a asp-controller="Clinic" asp-action="Details" asp-route-id="@clinic.ClinicId">
-                @clinic.ClinicName
+            <a asp-controller="Clinic" asp-action="Details" asp-route-id="@clinic.Id">
+                @clinic.Name
             </a>
         </li>
     }

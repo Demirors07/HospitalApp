@@ -6,7 +6,7 @@ namespace HospitalApp.ViewModels {
     public long DoctorId { get; set; }
     public string DoctorName { get; set; } // Yeni Alan
     public DateTime AppointmentDate { get; set; }
-    public List<TimeSpan> AvailableTimes { get; set; }
+ 
     public string PatientID { get; set; } // Yeni Alan
 }
 
