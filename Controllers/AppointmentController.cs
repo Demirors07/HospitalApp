@@ -67,6 +67,7 @@ public IActionResult AvailableTimes()
 {
     // var doctor = await _context.Doctors.FindAsync(doctorId);
     //  // Modeli oluştur
+    
 
 
     ViewData["aaa"] = "dataaaaaaaaaaa";
