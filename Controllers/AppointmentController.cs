@@ -63,16 +63,41 @@ public class AppointmentController : Controller
     }
 
    [HttpGet]
-public IActionResult AvailableTimes()
+[HttpPost]
+public IActionResult AvailableTimes(DateTime appointmentDate, string AppointmentTime)
 {
-    // var doctor = await _context.Doctors.FindAsync(doctorId);
-    //  // Modeli oluştur
+    // Çalışma saatleri
+    var allTimes = new List<string>
+    {
+        "09:00", "09:20", "09:40", "10:00", "10:20", "10:40", "11:00", "11:20", "11:40",
+        "13:40", "14:00", "14:20", "14:40", "15:00", "15:20", "15:40", "16:00", "16:20", "16:40", "17:00"
+    };
 
+    // Bugün için saati kontrol et
+    if (appointmentDate.Date == DateTime.Today)
+    {
+        var currentTime = DateTime.Now.TimeOfDay;
+        allTimes = allTimes
+            .Where(t => TimeSpan.Parse(t) > currentTime) // Geçmiş saatleri filtrele
+            .ToList();
+    }
 
-    ViewData["aaa"] = "dataaaaaaaaaaa";
-    
+    // Saat kontrolü
+    if (appointmentDate.Date == DateTime.Today && !string.IsNullOrEmpty(AppointmentTime))
+    {
+        var selectedTime = TimeSpan.Parse(AppointmentTime);
+        if (selectedTime <= DateTime.Now.TimeOfDay)
+        {
+            ModelState.AddModelError("AppointmentTime", "You cannot select a past time.");
+            ViewBag.time = allTimes;  // Zamanları tekrar gönder
+            return View();
+        }
+    }
 
-    return View();
+    // Randevuyu kaydetmek için buraya logik ekleyebilirsiniz
+    // Örnek: Veritabanına kaydetme işlemi
+
+    return RedirectToAction("AppointmentDetails"); // Başarılı işlem sonrası yönlendirme
 }
 
 // [HttpPost]
