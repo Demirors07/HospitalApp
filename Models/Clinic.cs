@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace HospitalApp.Models{
-    public class Clinic
+namespace HospitalApp.Models
 {
-    public long Id { get; set; }
-    public string? Name { get; set; }
-   public ICollection<Doctor> Doctors { get; set; }
+    public class Clinic
+    {
+        public long Id { get; set; }
+        public string? Name { get; set; }
+        public ICollection<Doctor> Doctors { get; set; }
 
-}
+    }
 }

@@ -15,18 +15,18 @@ public class ClinicController : Controller
         _context = context;
     }
 
-    // Kliniklerin listelendiği metot
+    // Method by which clinics are listed
     public IActionResult Index()
     {
         var clinics = _context.Clinics.ToList();
         return View(clinics);
     }
 
-    // Seçilen klinikteki doktorların detaylarının gösterildiği metot
+    // Method to show details of doctors in the selected clinic
     public IActionResult Details(int id)
     {
         var clinic = _context.Clinics
-            .Include(c => c.Doctors) // Doktorları dahil ediyoruz
+            .Include(c => c.Doctors)
             .FirstOrDefault(c => c.Id == id);
 
         if (clinic == null)

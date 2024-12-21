@@ -6,9 +6,9 @@
     @foreach (var doctor in Model)
     {
         <li>
-            <a asp-controller="Admin" asp-action="DeleteDoctor" asp-route-id="@doctor.Id">
+            <anch href="/Admin/DeleteDoctor/@doctor.Id">
                 @doctor.Name
-            </a>
+            </anch>
         </li>
     }
 </ul>

@@ -5,7 +5,7 @@
 
 <p>Doctor ID: @Model.DoctorId</p>
 <p>Date: @Model.AppointmentDate.ToShortDateString()</p>
-<p>Doctor Name: @ViewBag.DoctorName</p>
+<p>Doctor Name: @ViewBag.DName</p>
 
 <form asp-action="AvailableTimes" method="post">
     <input type="hidden" name="DoctorId" value="@Model.DoctorId" />
