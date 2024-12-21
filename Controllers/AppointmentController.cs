@@ -23,110 +23,124 @@ public class AppointmentController : Controller
         _userManager = userManager;
     }
 
-
-     // GET: Appointments/Create
+    // GET: Appointments/Create
     public IActionResult Create()
     {
         ViewBag.Clinics = _context.Clinics.ToList();
         ViewBag.Doctors = _context.Doctors.ToList();
         ViewBag.user = _userManager.GetUserId(User);
-            ViewData["aaa"] = "dataaaaaaaaaaa";
         return View();
     }
-
 
     [HttpPost]
     public async Task<IActionResult> Create(Appointment model)
     {
-        
         var userId = _userManager.GetUserId(User);
         model.PatientId = userId;
-        // var doctor = await _context.Doctors.FindAsync(model.DoctorId);
-        // model.Doctor = doctor;
+        
+        // Seçilen doktor bilgisini al
         var doctor = await _context.Doctors.FindAsync(model.DoctorId);
         model.Doctor = doctor; // Doctor bilgisini modele ekle
 
+        // Zaman dilimlerini al
         var availableTimes = GetTimes();
-        
-        ViewData["aaa"] ="aaaaaaaaaaaaaaaaaaaaaaaaaaaaasdsadasdsaaa";
+       // nerede yazıyor bu ViewData["aaa"] ="aaaaaaaaaaaaaaaaaaaaaaaaaaaaasdsadasdsaaa";
         ViewBag.time = availableTimes;
 
         // ViewBag.aaa = "sss";
         
-        
-            return View("AvailableTimes",model);
-        
-    
-            
+        // Aynı doktor, aynı tarih ve saatte başka bir randevu olup olmadığını kontrol et
+        var existingAppointment = await _context.Appointments
+            .Where(a => a.DoctorId == model.DoctorId &&
+                        a.AppointmentDate.Date == model.AppointmentDate.Date &&
+                        a.AppointmentTime == model.AppointmentTime)
+            .FirstOrDefaultAsync();
 
-        return View(model);
+        if (existingAppointment != null)
+        {
+            // Eğer randevu zaten alınmışsa, hata mesajı ekle
+            ViewData["ErrorMessage"] = "This appointment time is already taken. Please choose another time.";
+            return View("AvailableTimes", model); // Kullanıcıyı AvailableTimes sayfasına yönlendir
+        }
+
+        return View("AvailableTimes", model);
     }
 
-   [HttpGet]
-public IActionResult AvailableTimes()
-{
-    // var doctor = await _context.Doctors.FindAsync(doctorId);
-    //  // Modeli oluştur
+    [HttpPost]
+    public async Task<ActionResult> AvailableTimes(Appointment appointment)
+    {
+        // Zaman dilimlerini doldur
+        ViewBag.time = GetTimes();
 
+        // Doktor bilgisi eksikse kontrol et ve doldur
+        if (appointment.DoctorId > 0)
+        {
+            var doctor = await _context.Doctors.FindAsync(appointment.DoctorId);
+            if (doctor != null)
+            {
+                ViewBag.DoctorName = doctor.Name;
+            }
+            else
+            {
+                ViewBag.DoctorName = "Unknown Doctor";
+            }
+        }
 
-    ViewData["aaa"] = "dataaaaaaaaaaa";
-    
+        // Sadece seçilen doktor için aynı tarih ve saatte randevuları kontrol et
+        var existingAppointment = await _context.Appointments
+            .Where(a => 
+                a.DoctorId == appointment.DoctorId && // Sadece bu doktor
+                a.AppointmentDate.Date == appointment.AppointmentDate.Date && // Aynı gün
+                a.AppointmentTime == appointment.AppointmentTime) // Aynı saat
+            .FirstOrDefaultAsync();
 
-    return View();
-}
+        if (existingAppointment != null)
+        {
+            // Eğer randevu zaten alınmışsa, hata mesajı ekleyip tekrar formu göster
+            ViewData["ErrorMessage"] = $"Doctor {ViewBag.DoctorName} is already booked at {appointment.AppointmentTime}. Please select another time.";
+            return View("AvailableTimes", appointment);
+        }
 
-// [HttpPost]
-// public IActionResult AvailableTimes(Appointment model)
-// {
-   
-
-//     return View("/Home/Index");
-// }
-
- [HttpPost]
- // End of the adding appointment processes
- // Finally, We added the database
-     public async Task<ActionResult> AvailableTimes(Appointment appointment){
+        // Eğer randevu alınmamışsa veritabanına ekle
         _context.Appointments.Add(appointment);
         await _context.SaveChangesAsync();
+
+        // Başarıyla eklenirse, randevu detayları sayfasına yönlendir
         return RedirectToAction("AppointmentDetails", "Appointment");
     }
 
-
-// Örnek bir zaman üretim metodu
-private List<TimeSpan> GetTimes()
-{
-    // Örneğin 9:00 ile 17:00 arasında 20 dakikalık dilimler oluştur
-    var startTime = new TimeSpan(9, 0, 0);
-    var endTime = new TimeSpan(17, 0, 0);
-    var timeSlots = new List<TimeSpan>();
-
-    for (var time = startTime; time < endTime; time += TimeSpan.FromMinutes(20))
+    // Örnek bir zaman üretim metodu
+    private List<TimeSpan> GetTimes()
     {
-        timeSlots.Add(time);
-    }
+        var startTime = new TimeSpan(9, 0, 0); // Başlangıç: 09:00
+        var endTime = new TimeSpan(17, 0, 0);  // Bitiş: 17:00
+        var timeSlots = new List<TimeSpan>();
 
-    // Mevcut randevuları kontrol edip dolu zamanları çıkarabilirsiniz
+        for (var time = startTime; time < endTime; time += TimeSpan.FromMinutes(20))
+        {
+            timeSlots.Add(time);
+        }
+
+        // Mevcut randevuları kontrol edip dolu zamanları çıkarabilirsiniz
     // var bookedTimes = _context.Appointments
     //     .Where(a => a.DoctorId == doctorId && a.AppointmentDate.Date == date.Date)
     //     .Select(a => a.AppointmentTime)
     //     .ToList();
 
-    return timeSlots.ToList();
-}
+        return timeSlots;
+    }
 
-[HttpGet]
-public IActionResult GetDoctorsByClinic(int clinicId)
-{
-    var doctors = _context.Doctors
-        .Where(d => d.ClinicId == clinicId)
-        .Select(d => new { d.Id, d.Name })
-        .ToList();
+    [HttpGet]
+    public IActionResult GetDoctorsByClinic(int clinicId)
+    {
+        var doctors = _context.Doctors
+            .Where(d => d.ClinicId == clinicId)
+            .Select(d => new { d.Id, d.Name })
+            .ToList();
 
-    return Json(doctors);
-}
-
-
+        return Json(doctors);
+    }
+    
 
 //  // Randevu al ve kaydet
 //     [HttpPost]
@@ -148,47 +162,45 @@ public IActionResult GetDoctorsByClinic(int clinicId)
 //         return RedirectToAction("AppointmentDetails");
 //     }
 
-[HttpGet]
-        public async Task<IActionResult> AppointmentDetails()
+
+    [HttpGet]
+    public async Task<IActionResult> AppointmentDetails()
+    {
+        var userId = _userManager.GetUserId(User);
+
+        if (userId == null)
         {
-            // Kullanıcının kimliğini al
-            var userId = _userManager.GetUserId(User);
-
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            // Geçmiş randevular
-            var pastAppointments = await _context.Appointments
-                .Include(a => a.Doctor) // Doktor bilgilerini dahil et
-                .Where(a => a.PatientId == userId && a.AppointmentDate < DateTime.Now)
-                .OrderByDescending(a => a.AppointmentDate)
-                .ToListAsync();
-
-            // Gelecekteki randevular
-            var upcomingAppointments = await _context.Appointments
-                .Include(a => a.Doctor)
-                .Where(a => a.PatientId == userId && a.AppointmentDate >= DateTime.Now)
-                .OrderBy(a => a.AppointmentDate)
-                .ToListAsync();
-
-            var model = new AppointmentDetailsViewModel
-            {
-                PastAppointments = pastAppointments,
-                UpcomingAppointments = upcomingAppointments
-            };
-
-            return View(model);
+            return RedirectToAction("Login", "Account");
         }
 
-     public IActionResult EditClinics()
+        var pastAppointments = await _context.Appointments
+            .Include(a => a.Doctor) // Doktor bilgilerini dahil et
+            .Where(a => a.PatientId == userId && a.AppointmentDate < DateTime.Now)
+            .OrderByDescending(a => a.AppointmentDate)
+            .ToListAsync();
+
+        var upcomingAppointments = await _context.Appointments
+            .Include(a => a.Doctor)
+            .Where(a => a.PatientId == userId && a.AppointmentDate >= DateTime.Now)
+            .OrderBy(a => a.AppointmentDate)
+            .ToListAsync();
+
+        var model = new AppointmentDetailsViewModel
+        {
+            PastAppointments = pastAppointments,
+            UpcomingAppointments = upcomingAppointments
+        };
+
+        return View(model);
+    }
+
+    public IActionResult EditClinics()
     {
         var clinics = _context.Clinics.ToList();
         return View(clinics);
     }
 
-     public IActionResult EditDoctors()
+    public IActionResult EditDoctors()
     {
         var doctors = _context.Doctors.ToList();
         return View(doctors);
@@ -205,5 +217,7 @@ public IActionResult GetDoctorsByClinic(int clinicId)
         var doctors = _context.Doctors.ToList();
         return View(doctors);
     }
-
 }
+
+
+
