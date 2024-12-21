@@ -1,27 +1,40 @@
 @using HospitalApp.Models
 @model Appointment
 
-
 <h2>Available Times</h2>
 
 <p>Doctor ID: @Model.DoctorId</p>
 <p>Date: @Model.AppointmentDate.ToShortDateString()</p>
-<p>Doctor Name: @Model.Doctor.Name</p>
+<p>Doctor Name: @ViewBag.DoctorName</p>
 
 <form asp-action="AvailableTimes" method="post">
-    
-     <input type="hidden" name="DoctorId" value="@Model.DoctorId" />
+    <input type="hidden" name="DoctorId" value="@Model.DoctorId" />
     <input type="hidden" name="AppointmentDate" value="@Model.AppointmentDate" />
-    <input type="hidden" name="ClinicId" value="@Model.ClinicId">
+    <input type="hidden" name="ClinicId" value="@Model.ClinicId" />
     <input type="hidden" name="PatientId" value="@Model.PatientId" />
 
-     <label for="AppointmentTime">Select a Time</label>
+    <label for="AppointmentTime">Select a Time</label>
     <select id="Time" name="AppointmentTime" class="form-control">
-        @foreach (var time in ViewBag.time)
+        @if (ViewBag.time != null)
         {
-            <option value="@time">@time</option>
+            @foreach (var time in ViewBag.time)
+            {
+                <option value="@time">@time</option>
+            }
         }
-    </select> 
+        else
+        {
+            <option disabled>No times available</option>
+        }
+    </select>
+    <span asp-validation-for="AppointmentTime" class="text-danger"></span>
 
-     <button type="submit" class="btn btn-primary mt-3">Book Appointment</button>
+    @if (ViewData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger mt-3">
+            @ViewData["ErrorMessage"]
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary mt-3">Book Appointment</button>
 </form>
